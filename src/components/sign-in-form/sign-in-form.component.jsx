@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Button from '../button/button.component'
 import FormInput from "../form-input/form-input.component"
 import { auth, signInWithGooglePopup, createUserDocumentFromAuth, signInAuthWithEmailAndPassword } from '../../utils/firebase/firebase.utils'
@@ -12,15 +12,17 @@ const SignInForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields)
     const { email, password } = formFields
 
-    console.log(formFields)
+
+
 
     const logEmailPasswordUser = async (event) => {
         event.preventDefault()
         console.log(1)
         try {
             //second see if youve authenticated with email and password
-            const response = await signInAuthWithEmailAndPassword(email, password)
-            console.log(response)
+            const { user } = await signInAuthWithEmailAndPassword(email, password)
+
+            // setCurrentUser(user)
             //create an user document from the return
             // const userDocRef = await createUserDocumentFromAuth(response.user, { displayName })
             // resetFormFields()
@@ -57,8 +59,7 @@ const SignInForm = () => {
     }
 
     const logGoogleUser = async () => {
-        const { user } = await signInWithGooglePopup();
-        const userDocRef = await createUserDocumentFromAuth(user)
+        await signInWithGooglePopup();
 
     }
 
